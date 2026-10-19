@@ -1,3 +1,4 @@
+//set the variables
 let x3;
 let y3;
 let a;
@@ -12,6 +13,7 @@ let ran2
 let y2
 let dia
 let x2
+let light=50
 
 let xSpeed;
 let ySpeed;
@@ -39,6 +41,7 @@ function setup() {
 }
 
 function draw() {
+  //background
   background(47, 63, 135);
   ran1=random(-20,20)
   ran2=random(-20,20)
@@ -51,6 +54,7 @@ function draw() {
   drawCreature(x3, y3);
 }
 function drawCreature() {
+  //floating
   if (!dragging && !isDying) {
     x3 = x3 + xSpeed;
     y3 = y3 + ySpeed;
@@ -75,16 +79,18 @@ function drawCreature() {
     y3 = b / 2;
     ySpeed = -1 * ySpeed;
   }
-
+//the light ring
   noStroke();
+  let change = map(sin(frameCount / 100), -1, 1, -0.5, 0.5);
+  light=light+change
   for (let ring of rings) {
-    fill(ring.r, ring.g, ring.bl, 90);
+    fill(ring.r, ring.g, ring.bl, light);
     circle(ring.x, ring.y, ring.size);
   }
 
   if (isDying) {
     t = t - 3;
-
+//use ai and reference to learn the function
     if (t <= 0) {
       rings.push({
         x: x3,
@@ -120,13 +126,13 @@ function drawCreature() {
   translate(x3, y3);
 
   noStroke();
-
+//the creature
   for (let i = 10; i > 0; i = i - 1) {
     let size = i / 10;
     fill(r, g, bl, t * (1 - size * 0.7));
     ellipse(0, 0, a * size, b * size);
   }
-
+//blink
   if (mouseIsPressed) {
     stroke(255, t);
     strokeWeight(2);
@@ -145,6 +151,7 @@ function drawCreature() {
   }
 
   pop();
+  //breath
   let breath = map(sin(frameCount / 100), -1, 1, -0.2, 0.2);
 
   if (!isDying) {
@@ -159,13 +166,13 @@ function drawCreature() {
   if (b > 150) {
     b = 150;
   }
-
+//drag
   if (mouseIsPressed && dragging && !isDying) {
     x3 = mouseX;
     y3 = mouseY;
   }
 }
-
+//mouse interaction
 function mousePressed() {
   let d = dist(mouseX, mouseY, x3, y3);
 
@@ -190,4 +197,3 @@ function mouseClicked() {
     dragging = false;
   }
 }
-
